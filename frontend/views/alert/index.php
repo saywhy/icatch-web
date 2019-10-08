@@ -9,14 +9,102 @@ $this->title = '威胁';
     height:34px;
     color:#555;
     border: 1px solid #ccc;
-    width:70px;
+    width:66px;
     padding:5px;
-    outline:none
+    outline:none;
 }
 .num_class:focus{
     border: 1px solid #3c8dbc !important;
     box-shadow: none;
 }
+.alert-lists > td{
+    padding: 10px 8px!important;
+    line-height:18px!important;
+}
+
+.choose_box{
+    width: 100%;
+    height: 68px;
+    background: #F8F8F8;
+}
+.choose_box_left{
+    float: left;
+    line-height: 68px;
+    width: 300px;
+    padding-left: 8px;
+}
+.choose_box_right{
+    float: right;
+    height: 68px;
+    position: relative;
+    width: 316px;
+}
+.choose_box_mid{
+    float: right;
+    line-height: 68px;
+}
+.cursor{
+   cursor:pointer;
+   vertical-align:middle;
+   width: 13px;
+}
+.choose_text{
+   font-size: 14px;
+   color: #999;
+}
+
+.cel_btn_false{
+    border-radius: 4px;
+    width: 104px;
+    height: 36px;
+    font-size: 14px;
+    position: absolute;
+    left: 48px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #BBBBBB;
+    border: 1px solid #BBBBBB;
+    outline:none;
+}
+.cel_btn_true{
+    color: #666;!important;
+    background: #FFF5EE!important;
+    border: 1px solid #FFF5EE;
+}
+
+.ok_btn_false{
+    width: 104px;
+    height: 36px;
+    border: none;
+    background: #F2F2F2;
+    border-radius: 4px;
+    color: #BBBBBB;
+    position: absolute;
+    right: 36px;
+    top: 50%;
+    transform: translateY(-50%);
+    outline:none;
+}
+.ok_btn_true{
+    color: #fff;!important;
+    background: #337AB7!important;
+}
+.select_choose_type_false{
+    width: 114px;
+    height: 36px;
+    border-radius: 4px;
+    background-color: #F2F2F2;
+    color: #bbb;
+    border:1px solid #F2F2F2;
+    outline:none;
+}
+.select_choose_type_true{
+   cursor:pointer;
+   background-color: #fff !important;
+   color:#333;!important;
+   border:1px solid #fff;
+}
+
 </style>
 <!-- Main content -->
 <section class="content" ng-app="myApp">
@@ -52,7 +140,7 @@ $this->title = '威胁';
 
     <!--当前告警 -->
     <div class="row">
-        <div class="col-md-12" ng-controller="behCtrl">
+        <div class="col-md-12" ng-controller="behCtrl" ng-cloak>
             <div class="box">
                 <div class="box-header">
                     <h3 class="box-title"><i class="fa fa-bell-o"></i> 当前告警</h3>
@@ -61,21 +149,30 @@ $this->title = '威胁';
                 </div>
                 <!-- 搜索条件 -->
                 <div class="row margin search_box">
-
-                    <div class="form-group col-md-2" style="width:200px">
-                        <label>计算机</label>
+                    <div class="form-group col-md-2" style="width:168px">
+                        <label>计算机名/IP</label>
                         <input type="text" class="form-control input_radius" ng-model="searchData.ComputerName" ng-keyup="myKeyup($event)">
                     </div>
-                    <!-- <div class="form-group col-md-2" style="width:200px">
+                    <!-- <div class="form-group col-md-2" style="width:150px">
                         <label>告警事件</label>
                         <input type="text" class="form-control input_radius" ng-model="searchData.AlertType" ng-keyup="myKeyup($event)">
                     </div> -->
-                    <div class="form-group col-md-2" style="width: 200px;">
-                                <label>告警事件</label>
-                                <select class="form-control input_radius" ng-init="searchData.AlertType=10"  ng-model="searchData.AlertType"
-                                    ng-options="x.num as x.label for x in AlertType_select"></select>
+                    <div class="form-group col-md-1" style="width: 150px;">
+                        <label>告警事件</label>
+                        <select class="form-control input_radius" ng-init="searchData.AlertType=10"  ng-model="searchData.AlertType"
+                            ng-options="x.num as x.label for x in AlertType_select"></select>
                     </div>
-                    <div class="form-group col-md-2" style="width:200px">
+                    <!-- 组下拉框 -->
+                    <div class="form-group col-md-1" style="width: 150px;">
+                        <label>组</label>
+                        <select class="form-control input_radius" ng-model="searchData.gid">
+                            <option value="" label="所有"></option>
+                            <option ng-repeat="x in alertGid_select" value="{{x.text}}" label="{{x.text}}"></option>
+                        </select>
+                    </div>
+                    <!-- 组下拉框 -->
+
+                    <div class="form-group col-md-2" style="width:120px">
                         <label>告警对象</label>
                         <input type="text" class="form-control input_radius" ng-model="searchData.Label" ng-keyup="myKeyup($event)">
                     </div>
@@ -96,11 +193,15 @@ $this->title = '威胁';
                         <button class=" btn btn-primary btn_style" style="max-width: 80px;" ng-click="search()">搜 索</button>
                     </div>
                 </div>
+
                 <div class="box-body table-responsive no-padding">
                     <div class="nav-tabs-custom" style="margin-bottom: 0px">
                         <div class="tab-content" style="padding-top:0px;border-bottom:0px; ">
                             <table class="table table-hover ng-cloak">
                                 <tr>
+                                    <th><input type="checkbox" ng-checked="IDListData.length === pages.data.length && IDListData.length > 0"
+                                        ng-click="selectAll()">
+                                    </th>
                                     <th style="padding-left: 30px;">计算机</th>
                                     <th>告警事件</th>
                                     <th>告警对象</th>
@@ -109,17 +210,22 @@ $this->title = '威胁';
                                     <th>状态</th>
                                 </tr>
 
-                                <tr style="cursor: pointer;" ng-repeat="item in pages.data" ng-click="detail(item,$event)">
-                                <!-- <tr style="cursor: pointer;" ng-repeat="item in pages.data" > -->
-                                    <td style="padding-left: 30px;" title="{{item.SensorID+'|'+item.AlertID}}"><i class="fa fa-laptop"></i>
-                                        <span ng-bind="item.ComputerName"></span></td>
+                                <tr class="alert-lists" style="cursor: pointer;" ng-repeat="item in pages.data" ng-click="detail(item,$event)">
+                                    <td style="z-index:999;" ng-click="$event.stopPropagation();">
+                                        <input type="checkbox" ng-checked="IDList.indexOf(item.id) != -1"
+                                        ng-click="selectOne(item,$event)" ng-disabled="(item.status != 1)">
+                                    </td>
+
+                                    <td style="padding-left: 30px;position:relative;" title="{{item.SensorID+'|'+item.AlertID}}">
+                                       <a style="position:absolute;top:1px;z-index:999;" ng-bind="item.ComputerName"  ng-click="linkToSensor(item.SensorID,$event)"></a>
+                                       <span style="display:block;position:absolute;top:21px;" ng-bind="item.SensorIP"></span>
+                                    </td>
                                     <td>
                                         <span class="label label-{{AlertType_str[item.AlertType].css}}" ng-bind="AlertType_str[item.AlertType].label"></span>
                                     </td>
                                     <td ng-bind="item.Label"></td>
                                     <td ng-bind="item.created_at*1000 | date:'yyyy-MM-dd HH:mm'"></td>
                                     <td ng-bind="item.Point == 100 ? 100 : 0"></td>
-
 
                                     <td>
                                         <div class="btn-group {{(ariaID == item.id)?'open':''}}">
@@ -143,8 +249,31 @@ $this->title = '威胁';
                                         </div>
                                     </td>
                                 </tr>
-
                             </table>
+
+                            <!-- 处理状态栏 -->
+                            <div class="choose_box" ng-if="pages.data.length > 0">
+                                <div class="choose_box_left">
+                                    <p style="margin:0">
+                                        <!--<img src="/images/select_false.png" class="cursor select_false" ng-click="selectAll()" alt="">-->
+                                        <input type="checkbox" ng-checked="IDListData.length === pages.data.length && IDListData.length > 0" ng-click="selectAll()"/>
+                                        <span>全选</span>
+                                        <span class="choose_text">(已选择</span>
+                                        <span class="choose_text ng-binding" ng-bind="IDListData.length"></span>
+                                        <span class="choose_text">条预警)</span>
+                                    </p>
+                                </div>
+                                <div class="choose_box_right">
+                                    <button class="cel_btn_false" ng-click="celAlert();" ng-class="{'cel_btn_true':IDListData.length > 0}" ng-disabled="IDListData.length === 0">取消</button>
+                                    <button class="ok_btn_false" ng-click="update('setOldBeh',IDListData)" ng-class="{'ok_btn_true':IDListData.length > 0}" ng-disabled="IDListData.length === 0">确定</button>
+                                </div>
+                                <div class="choose_box_mid">
+                                    　<span style="margin-right:12px;">更改处理状态为</span>
+                                      <select class="select_choose_type_false" ng-class="{'select_choose_type_true':IDListData.length > 0}" ng-disabled="IDListData.length === 0">
+                                           <option label="已解决" value="string:2">已解决</option>
+                                      </select>
+                                </div>
+                            </div>
 
                             <!-- /.angularjs分页 -->
                             <div style="border-top: 1px solid #f4f4f4;padding: 10px;">
@@ -339,6 +468,10 @@ $this->title = '威胁';
         </div>
     </div>
 </section>
+
+<script type="text/javascript">
+  var GroupList = <?= json_encode($GroupList) ?>;
+</script>
 
 <script src="/js/controllers/baseEX.js"></script>
 <!-- <script src="/js/controllers/fileEX.js"></script>

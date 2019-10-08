@@ -22,7 +22,7 @@ $this->title = '计算机';
                     <div class="tab-pane active" id="protect" ng-controller="protectCtrl">
                         <div class="row margin">
                             <div class="form-group col-md-2">
-                                <label>计算机</label>
+                                <label>计算机名/IP</label>
                                 <input type="text" class="form-control" ng-model="searchData.ComputerName" ng-change="searchDataChange('ComputerName')"
                                     ng-keyup="myKeyup($event)">
                             </div>

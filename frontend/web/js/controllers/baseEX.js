@@ -111,6 +111,7 @@ function baseEX($scope, $http, ajaxURL, pageNowName) {
   };
   $scope.IDList = [];
   $scope.ItemList = {};
+
   $scope.SrcType_str = [
     {
       css: "warning",
@@ -238,6 +239,7 @@ function baseEX($scope, $http, ajaxURL, pageNowName) {
     }
     for (var i = $scope.IDList.length - 1; i >= 0; i--) {
       var ID = $scope.IDList[i];
+
       if (ID4NewPage.indexOf(ID) == -1) {
         $scope.IDList.splice(i, 1);
       }
@@ -264,6 +266,7 @@ function baseEX($scope, $http, ajaxURL, pageNowName) {
         }
       );
   };
+
   $scope.selectAll = function() {
     if ($scope.IDList.length == $scope.pages.data.length) {
       $scope.IDList = [];
@@ -275,6 +278,7 @@ function baseEX($scope, $http, ajaxURL, pageNowName) {
       }
     }
   };
+
   $scope.selectOne = function(id, $event) {
     $event.stopPropagation();
     var index = $scope.IDList.indexOf(id);
@@ -291,8 +295,6 @@ function baseEX($scope, $http, ajaxURL, pageNowName) {
       page: sessionStorage.getItem(pageNowName),
       List: []
     };
-    // console.log(ajaxURL);
-
     var send = function() {
       var loading = zeroModal.loading(4);
       $http.post(ajaxURL.update, rqs_data).then(

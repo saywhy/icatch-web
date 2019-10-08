@@ -1,14 +1,25 @@
 if (!myApp) {
   var myApp = angular.module("myApp", []);
 }
+
+//当前告警控制器
 myApp.controller("behCtrl", function($scope, $http, $filter) {
+  let listTimer = null;
+  let autoplay = false;
   $scope.pages = {
     data: [],
     count: 0,
     maxPage: "...",
     pageNow: 1
   };
-  // 默认参数时间
+
+  $scope.IDList = [];
+  $scope.ItemList = {};
+
+  //批量选取数据
+  $scope.IDListData = [];
+
+  //设置默认参数
   $scope.searchData = {
     startTime: moment()
       .subtract(365, "days")
@@ -17,17 +28,18 @@ myApp.controller("behCtrl", function($scope, $http, $filter) {
     ComputerName: "",
     AlertType: 10,
     Label: "",
-    Label: "",
+   // Label: "",
+    gid:'',
     MinPoint: 0,
     MaxPoint: 100
   };
-  // console.log(location);
+
   if (location.search) {
     var ComputerName = localStorage.getItem("parmas");
-    // console.log(ComputerName);
     $scope.searchData.ComputerName = ComputerName;
   }
-  $scope.SrcType_str = [
+
+/* $scope.SrcType_str = [
     {
       css: "warning",
       label: "未知"
@@ -52,7 +64,9 @@ myApp.controller("behCtrl", function($scope, $http, $filter) {
       css: "warning",
       label: "其他"
     }
-  ];
+  ];*/
+
+  //告警事件
   $scope.AlertType_select = [
     {
       label: "可疑行为",
@@ -84,7 +98,9 @@ myApp.controller("behCtrl", function($scope, $http, $filter) {
       num: 10
     }
   ];
-  $scope.searchNew = JSON.stringify($scope.searchData);
+
+  //告警组下拉框
+  $scope.alertGid_select = GroupList;
 
   $scope.AlertType_str = [
     {
@@ -128,6 +144,7 @@ myApp.controller("behCtrl", function($scope, $http, $filter) {
       num: 7
     }
   ];
+
   $scope.status_str = [
     {
       css: "success",
@@ -150,6 +167,7 @@ myApp.controller("behCtrl", function($scope, $http, $filter) {
       label: "例外"
     }
   ];
+
   $scope.OldType_str = {
     IP: {
       label: "可疑IP",
@@ -176,6 +194,8 @@ myApp.controller("behCtrl", function($scope, $http, $filter) {
       label: "勒索软件"
     }
   };
+
+  //警告列表跳转
   $scope.detail = function(item, $event) {
     if ($event.target.nodeName == "BUTTON") {
       return;
@@ -213,11 +233,15 @@ myApp.controller("behCtrl", function($scope, $http, $filter) {
     }
     callback();
   }
-  // 获取数据
-  $scope.getnewPage = function(pageNow) {
-    console.log("123213");
 
-    $scope.searchObj = JSON.parse($scope.searchNew);
+  //获取告警数据列表数据
+  $scope.getnewPage = function(pageNow) {
+
+    $scope.IDList = [];
+    $scope.IDListData = [];
+
+    $scope.searchObj = $scope.searchData;
+    pageNow = pageNow ? pageNow : $scope.pages.pageNow;
     var params = {
       stime: $scope.searchObj.startTime,
       etime: $scope.searchObj.endTime,
@@ -227,12 +251,24 @@ myApp.controller("behCtrl", function($scope, $http, $filter) {
       MinPoint: $scope.searchObj.MinPoint,
       MaxPoint: $scope.searchObj.MaxPoint,
       page: pageNow,
-      rows: "10"
+      rows: "3",
+      gid:$scope.searchObj.gid
     };
-    pageNow = pageNow ? pageNow : 1;
+
+    if(!autoplay){
+      params.stime = '';
+      params.etime = '';
+    }
+
+    //console.log(params)
+
     $scope.pageGeting = true;
     $http.post("newpage", params).then(
       function success(rsp) {
+
+       // console.log('*********')
+        console.log(rsp);
+
         $scope.pageGeting = false;
         $scope.pages = rsp.data;
         angular.forEach($scope.pages.data, function(item) {
@@ -248,12 +284,15 @@ myApp.controller("behCtrl", function($scope, $http, $filter) {
   };
 
   $scope.getnewPage();
+
+  //搜索按钮点击事件
   $scope.search = function() {
+    clearInterval(listTimer);
+    autoplay = true;
     $scope.searchNew = JSON.stringify($scope.searchData);
     $scope.getnewPage();
   };
-  $scope.IDList = [];
-  $scope.ItemList = {};
+
   $scope.getChart = function() {
     $http.post("chart-data", {}).then(
       function success(rsp) {
@@ -273,6 +312,7 @@ myApp.controller("behCtrl", function($scope, $http, $filter) {
       }
     }
   }
+
   $scope.setAriaID = function(item, $event) {
     $event.stopPropagation();
     if ($scope.ariaID == item.id) {
@@ -281,6 +321,7 @@ myApp.controller("behCtrl", function($scope, $http, $filter) {
       $scope.ariaID = item.id;
     }
   };
+
   $scope.delAriaID = function($event) {
     $event.stopPropagation();
     setTimeout(function() {
@@ -307,8 +348,19 @@ myApp.controller("behCtrl", function($scope, $http, $filter) {
         }
       );
     };
-    if (item) {
+
+    let flag = Object.prototype.toString.call(item);
+
+    if (flag === '[object Object]') {
       rqs_data.List.push(item);
+      send();
+    } else if(flag === '[object Array]'){
+      rqs_data = {
+        type: type,
+        List: item
+      };
+      $scope.IDList = [];
+      $scope.IDListData = [];
       send();
     } else {
       IDValidate(function() {
@@ -319,7 +371,15 @@ myApp.controller("behCtrl", function($scope, $http, $filter) {
       });
     }
   };
+
   $scope.getChart();
+
+  listTimer = setInterval(function () {
+      //$scope.searchData.startTime = moment().subtract(365, 'days').unix();
+      //$scope.searchData.endTime = moment().unix();
+      $scope.getnewPage();
+  }, 5000);
+
   setInterval(function() {
     $scope.getChart();
   }, 10000);
@@ -376,4 +436,51 @@ myApp.controller("behCtrl", function($scope, $http, $filter) {
       $scope.searchData.MaxPoint = 100;
     }
   };
+
+  //ycl 计算机名点击链接计算机卡片
+  $scope.linkToSensor = function (SensorID,$event) {
+    $event.stopPropagation();
+    location.href = "/sensor/detail?sid=" + SensorID;
+  }
+
+  //ycl 当前告警checkbox单选
+  $scope.selectOne = function (item, $event) {
+    $event.stopPropagation();
+
+    //停掉自动刷新状态
+    clearInterval(listTimer);
+    var index = $scope.IDList.indexOf(item.id);
+
+    if (index == -1) {
+      $scope.IDList.push(item.id);
+      $scope.IDListData.push(item);
+    } else {
+      $scope.IDList.splice(index, 1);
+      $scope.IDListData.splice(index, 1);
+    }
+  }
+
+  //ycl 当前告警checkbox全选
+  $scope.selectAll = function () {
+    //停掉自动刷新状态
+    clearInterval(listTimer);
+    if ($scope.IDList.length === $scope.pages.data.length) {
+      $scope.IDList = [];
+      $scope.IDListData = [];
+    } else {
+      $scope.IDList = [];
+      $scope.IDListData = [];
+      for (var i in $scope.pages.data) {
+        var data = $scope.pages.data[i];
+        $scope.IDList.push(data.id);
+        $scope.IDListData.push(data);
+      }
+    }
+  }
+
+  //ycl 批量处理取消点击事件
+  $scope.celAlert = function () {
+    $scope.IDList = [];
+    $scope.IDListData = [];
+  }
 });

@@ -8,8 +8,6 @@ var Groups = {
 var app = angular.module('myApp', []);
 
 function baseController($scope, $http, ajaxURL, pageNowName) {
-    // console.log(location);
-    
     rootScope = $scope;
     rootScope.Groups = Groups;
     $scope.pages = {
@@ -38,7 +36,6 @@ function baseController($scope, $http, ajaxURL, pageNowName) {
     $scope.WhiteList = {};
 
 
-
     $scope.setPage = function (rsp) {
         if (rsp.data.status != "success") {
             return;
@@ -49,7 +46,7 @@ function baseController($scope, $http, ajaxURL, pageNowName) {
         //     console.log(item.status);
         // });
 
-        var ID4NewPage = []
+        var ID4NewPage = [];
         for (var i in $scope.pages.data) {
             var sensor = $scope.pages.data[i];
             $scope.SensorList[sensor.SensorID] = sensor;
@@ -337,7 +334,9 @@ function baseController($scope, $http, ajaxURL, pageNowName) {
     };
 
     $scope.getPage();
+
     $scope.pageGeting = false;
+
     setInterval(function () {
         if (!$scope.pageGeting) {
             $scope.getPage();
@@ -350,6 +349,7 @@ app.controller('protectCtrl', function ($scope, $http, $filter) {
         getPage: "protect",
         update: "update"
     }, "protectNow");
+
     $scope.searchData = {
         ComputerName: '*',
         ProfileVersion: '*',
@@ -357,6 +357,7 @@ app.controller('protectCtrl', function ($scope, $http, $filter) {
         SensorVersion: '*',
         status: '*'
     };
+
     $scope.searchType = "";
     $scope.postType = "";
     $scope.rsqType = "";
@@ -416,9 +417,7 @@ app.controller('quarantineCtrl', function ($scope, $http, $filter) {
             }
         });
 
-
         var GroupTree = [];
-
 
         for (var i = 0; i < GroupList.length; i++) {
             var group = GroupList[i];
@@ -433,6 +432,8 @@ app.controller('quarantineCtrl', function ($scope, $http, $filter) {
                 Groups[group.pid].nodes.push(group);
             }
         }
+
+
         var treeDom;
 
         function updateTree() {
