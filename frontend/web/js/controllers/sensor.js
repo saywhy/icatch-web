@@ -106,10 +106,9 @@ function baseController($scope, $http, ajaxURL, pageNowName) {
         if ($scope.postData) {
             postData = angular.copy($scope.postData);
         }
-        console.log(postData);
+
         postData['page'] = pageNow;
         postData['rows'] = $scope.select.model;
-        console.log(postData);
 
         $http.post(ajaxURL.getPage, postData).then(function success(rsp) {
 
@@ -438,6 +437,9 @@ function baseController($scope, $http, ajaxURL, pageNowName) {
                         //$scope.$apply();
                         $scope.getPage();
                         zeroModal.close(loading);
+
+                        $scope.sensorDangerList = [];
+                        $scope.SensorIDList = [];
 
                     }, function err(rsp) {
                         zeroModal.close(loading);
