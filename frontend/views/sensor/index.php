@@ -107,7 +107,7 @@ $this->title = '计算机';
                             <table class="table table-hover ng-cloak">
                                 <tr>
                                     <th><input type="checkbox" ng-checked="SensorIDList.length == pages.data.length"
-                                            ng-click="selectAll()"></th>
+                                            ng-click="selectAll()" ng-show="pages.data.length > 0"></th>
                                     <th>计算机名</th>
                                     <th>状态</th>
                                     <th>IP</th>

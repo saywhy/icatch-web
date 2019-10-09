@@ -112,7 +112,6 @@ function baseController($scope, $http, ajaxURL, pageNowName) {
 
         $http.post(ajaxURL.getPage, postData).then(function success(rsp) {
 
-            //console.log('*********')
             $scope.pageGeting = false;
             $scope.setPage(rsp);
 
