@@ -28,10 +28,10 @@ function baseController($scope, $http, ajaxURL, pageNowName) {
     }];
 
     /*
-    * 0：卸载
-    * 1：在线
-    * 2：断线
-    * */
+     * 0：卸载
+     * 1：在线
+     * 2：断线
+     * */
 
     //卸载数组
     $scope.sensorDangerList = [];
@@ -135,9 +135,9 @@ function baseController($scope, $http, ajaxURL, pageNowName) {
                 $scope.SensorIDList.push(sensor.SensorID);
                 ///
                 let status = sensor.status;
-                if(status == 0){
+                if (status == 0) {
                     $scope.sensorDangerList.push(sensor.SensorID);
-                }else if(status == 1){
+                } else if (status == 1) {
                     $scope.sensorsuccessList.push(sensor.SensorID);
                 }
             }
@@ -155,7 +155,7 @@ function baseController($scope, $http, ajaxURL, pageNowName) {
         ///
         let status = sensor.status;
 
-        if(status == 0){
+        if (status == 0) {
             let idx = $scope.sensorDangerList.indexOf(sensor.SensorID);
             if (idx == -1) {
                 $scope.sensorDangerList.push(sensor.SensorID);
@@ -163,7 +163,7 @@ function baseController($scope, $http, ajaxURL, pageNowName) {
                 $scope.sensorDangerList.splice(idx, 1);
             }
 
-        }else if(status == 1){
+        } else if (status == 1) {
             let idx = $scope.sensorsuccessList.indexOf(sensor.SensorID);
             if (idx == -1) {
                 $scope.sensorsuccessList.push(sensor.SensorID);
@@ -345,8 +345,13 @@ function baseController($scope, $http, ajaxURL, pageNowName) {
             ok: true,
             cancel: true,
             okFn: function () {
+                console.log(111);
                 if (!nowGroup) {
-                    zeroModal.error('请选择计算机分组！');
+                    // zeroModal.error('请选择计算机分组！');
+                    $scope.searchData.group = '*';
+                    hide_box.appendChild(groupTree);
+                    $scope.$apply();
+                    zeroModal.closeAll();
                     return false;
                 }
                 $scope.searchData.group = nowGroup.id;
@@ -425,13 +430,15 @@ function baseController($scope, $http, ajaxURL, pageNowName) {
             content: '确定要删除吗？',
             width: W + "px",
             height: H + "px",
-            okFn: function() {
+            okFn: function () {
                 var rqs_data = {
                     sid: $scope.sensorDangerList
                 };
                 var loading = zeroModal.loading(4);
 
-                $http.delete("/sensor/del-sensor", {data: rqs_data})
+                $http.delete("/sensor/del-sensor", {
+                        data: rqs_data
+                    })
                     .then(function success(rsp) {
                         //$scope.$apply();
                         $scope.getPage();
@@ -445,7 +452,7 @@ function baseController($scope, $http, ajaxURL, pageNowName) {
                         zeroModal.error('删除计算机失败！');
                     });
             },
-            cancelFn: function() {}
+            cancelFn: function () {}
         });
     }
 
