@@ -283,9 +283,6 @@ myApp.controller("behCtrl", function ($scope, $http, $filter) {
         $http.post("newpage", params).then(
             function success(rsp) {
 
-                // console.log('*********')
-                console.log(rsp);
-
                 $scope.pageGeting = false;
                 $scope.pages = rsp.data;
                 angular.forEach($scope.pages.data, function (item) {
@@ -481,7 +478,7 @@ myApp.controller("behCtrl", function ($scope, $http, $filter) {
         }
     }
 
-    //ycl 当前告警checkbox全选
+    //当前告警checkbox全选
     $scope.selectAll = function () {
         //停掉自动刷新状态
         clearInterval(listTimer);
@@ -499,7 +496,7 @@ myApp.controller("behCtrl", function ($scope, $http, $filter) {
         }
     }
 
-    //ycl 批量处理取消点击事件
+    //批量处理取消点击事件
     $scope.celAlert = function () {
         $scope.IDList = [];
         $scope.IDListData = [];

@@ -7,6 +7,14 @@ use yii\widgets\LinkPager;
 $this->title = '计算机';
 ?>
 
+<style>
+    .alert_search_input {
+        width: 80px;
+        height: 30px;
+        float: right;
+        margin-right: 10px;
+    }
+</style>
 <!-- Main content -->
 <section class="content" ng-app="myApp">
     <div class="row">
@@ -73,10 +81,11 @@ $this->title = '计算机';
                         <div class="row margin">
                             <?php if(Yii::$app->user->identity->role == 'admin'){?>
                             <div class="btn-group">
-                                <button type="button" ng-click="sendUpdateProfile()" class="btn btn-default" ng-class="SensorIDList.length ? '' : 'disabled'">赋予计算机配置文件</button>
-                                <button type="button" ng-click="addGroups()" class="btn btn-default" ng-class="SensorIDList.length ? '' : 'disabled'">加入计算机组</button>
-                                <button type="button" ng-click="sendUpdate()" class="btn btn-default" ng-class="SensorIDList.length ? '' : 'disabled'">升级Sensor</button>
-                                <button type="button" ng-click="sendBase('UNINIT')" class="btn btn-default" ng-class="SensorIDList.length ? '' : 'disabled'">卸载Sensor</button>
+                                <button type="button" ng-click="sendUpdateProfile()" class="btn btn-default" ng-class="sensorsuccessList.length  && sensorDangerList.length == 0 ? '' : 'disabled'"  ng-disabled="!sensorsuccessList.length || sensorDangerList.length" >赋予计算机配置文件</button>
+                                <button type="button" ng-click="addGroups()" class="btn btn-default" ng-class="sensorsuccessList.length  && sensorDangerList.length == 0 ? '' : 'disabled'" ng-disabled="!sensorsuccessList.length || sensorDangerList.length">加入计算机组</button>
+                                <button type="button" ng-click="sendUpdate()" class="btn btn-default" ng-class="sensorsuccessList.length  && sensorDangerList.length == 0 ? '' : 'disabled'" ng-disabled="!sensorsuccessList.length || sensorDangerList.length">升级Sensor</button>
+                                <button type="button" ng-click="sendBase('UNINIT')" class="btn btn-default" ng-class="sensorsuccessList.length  && sensorDangerList.length == 0 ? '' : 'disabled'" ng-disabled="!sensorsuccessList.length || sensorDangerList.length">卸载Sensor</button>
+                                <button type="button" ng-click="sendDelete()" class="btn btn-default"  ng-class="sensorDangerList.length  && sensorsuccessList.length == 0 ? '' : 'disabled'" ng-disabled="!sensorDangerList.length || sensorsuccessList.length">删除Sensor</button>
                             </div>
                             <?php }?>
                             <style type="text/css">
@@ -109,10 +118,11 @@ $this->title = '计算机';
                                     <th ng-if="rsqType=='group'">组</th>
                                     <th ng-if="rsqType=='SensorVersion'">Sensor版本</th>
                                 </tr>
+                                <!--ng-disabled="(sensor.status != 1)"-->
 
                                 <tr style="cursor: pointer;" ng-repeat="sensor in pages.data" ng-click="detail(sensor.SensorID)">
                                     <td><input type="checkbox" ng-checked="SensorIDList.indexOf(sensor.SensorID) != -1"
-                                            ng-click="selectOne(sensor.SensorID,$event)" ng-disabled="(sensor.status != 1)"></td>
+                                            ng-click="selectOne(sensor,$event)" ng-hide="sensor.status == 2"></td>
                                     <td ng-class="sensor.isolate == 1 ? 'text-red' : ''" title="{{sensor.SensorID}}">
                                         <i class="ico fa fa-laptop"></i>
                                         <span ng-bind="sensor.ComputerName"></span>
@@ -162,6 +172,8 @@ $this->title = '计算机';
                                             ng-if="pages.pageNow<pages.maxPage"></a></li>
                                     <li><a href="javascript:void(0);" ng-click="getPage(pages.pageNow+1)" ng-if="pages.pageNow<pages.maxPage">下一页</a></li>
                                 </ul>
+                                 <select class="alert_search_input" ng-change="select_change()" style="background-color: #fff;"
+                                                                    ng-model="select.model" ng-options="x.num as x.type for x in select_model"></select>
                             </div>
                             <!-- /.angularjs分页 -->
                         </div>

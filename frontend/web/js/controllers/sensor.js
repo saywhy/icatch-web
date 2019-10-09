@@ -27,6 +27,40 @@ function baseController($scope, $http, ajaxURL, pageNowName) {
         label: '断线'
     }];
 
+    /*
+    * 0：卸载
+    * 1：在线
+    * 2：断线
+    * */
+
+    //卸载数组
+    $scope.sensorDangerList = [];
+
+    //在线数组
+    $scope.sensorsuccessList = [];
+
+    //下拉框条数
+    $scope.select_model = [{
+            num: '10',
+            type: "10条/页"
+        },
+        {
+            num: '20',
+            type: "20条/页"
+        },
+        {
+            num: '50',
+            type: "50条/页"
+        },
+        {
+            num: '100',
+            type: "100条/页"
+        },
+    ];
+    $scope.select = {
+        model: '10'
+    }
+
     $scope.isolate_str = ['text-blue', 'text-gray'];
     $scope.pause_str = ['glyphicon-play text-green', 'glyphicon-pause text-yellow'];
     $scope.work_str = ['', 'glyphicon-hourglass text-yellow', 'glyphicon-ok text-green', 'glyphicon-remove text-red'];
@@ -34,7 +68,6 @@ function baseController($scope, $http, ajaxURL, pageNowName) {
     $scope.SensorIDList = [];
     $scope.SensorList = {};
     $scope.WhiteList = {};
-
 
     $scope.setPage = function (rsp) {
         if (rsp.data.status != "success") {
@@ -65,40 +98,83 @@ function baseController($scope, $http, ajaxURL, pageNowName) {
     }
 
     $scope.getPage = function (pageNow) {
+
         pageNow = pageNow ? pageNow : sessionStorage.getItem(pageNowName);
+
         $scope.pageGeting = true;
         var postData = {};
         if ($scope.postData) {
             postData = angular.copy($scope.postData);
         }
+        console.log(postData);
         postData['page'] = pageNow;
+        postData['rows'] = $scope.select.model;
+        console.log(postData);
+
         $http.post(ajaxURL.getPage, postData).then(function success(rsp) {
+
+            //console.log('*********')
             $scope.pageGeting = false;
             $scope.setPage(rsp);
+
         }, function err(rsp) {
             $scope.pageGeting = false;
         });
     }
+
     $scope.selectAll = function () {
         if ($scope.SensorIDList.length == $scope.pages.data.length) {
             $scope.SensorIDList = [];
+            $scope.sensorsuccessList = [];
+            $scope.sensorDangerList = [];
         } else {
             $scope.SensorIDList = [];
+            $scope.sensorsuccessList = [];
+            $scope.sensorDangerList = [];
+
             for (var i in $scope.pages.data) {
                 var sensor = $scope.pages.data[i];
                 $scope.SensorIDList.push(sensor.SensorID);
+                ///
+                let status = sensor.status;
+                if(status == 0){
+                    $scope.sensorDangerList.push(sensor.SensorID);
+                }else if(status == 1){
+                    $scope.sensorsuccessList.push(sensor.SensorID);
+                }
             }
         }
     }
-    $scope.selectOne = function (SensorID, $event) {
+
+    $scope.selectOne = function (sensor, $event) {
         $event.stopPropagation();
-        var index = $scope.SensorIDList.indexOf(SensorID);
+        var index = $scope.SensorIDList.indexOf(sensor.SensorID);
         if (index == -1) {
-            $scope.SensorIDList.push(SensorID);
+            $scope.SensorIDList.push(sensor.SensorID);
         } else {
             $scope.SensorIDList.splice(index, 1);
         }
+        ///
+        let status = sensor.status;
+
+        if(status == 0){
+            let idx = $scope.sensorDangerList.indexOf(sensor.SensorID);
+            if (idx == -1) {
+                $scope.sensorDangerList.push(sensor.SensorID);
+            } else {
+                $scope.sensorDangerList.splice(idx, 1);
+            }
+
+        }else if(status == 1){
+            let idx = $scope.sensorsuccessList.indexOf(sensor.SensorID);
+            if (idx == -1) {
+                $scope.sensorsuccessList.push(sensor.SensorID);
+            } else {
+                $scope.sensorsuccessList.splice(idx, 1);
+            }
+        }
     }
+
     $scope.detail = function (SensorID) {
         // var Sensor = $scope.SensorList[SensorID];
 
@@ -116,7 +192,6 @@ function baseController($scope, $http, ajaxURL, pageNowName) {
         // });
         location.href = "detail?sid=" + SensorID;
     }
-
 
     function SensorIDValidate(callback) {
         var haveWorking = false;
@@ -159,12 +234,16 @@ function baseController($scope, $http, ajaxURL, pageNowName) {
         SensorIDValidate(function () {
             rqs_data = {
                 type: type,
-                SensorIDList: $scope.SensorIDList
+                SensorIDList: $scope.sensorsuccessList
             };
             var loading = zeroModal.loading(4);
             $http.post("sendbase", rqs_data).then(function success(rsp) {
                 setWorking();
                 zeroModal.close(loading);
+
+                $scope.sensorsuccessList = [];
+                $scope.SensorIDList = [];
+
             }, function err(rsp) {
                 zeroModal.close(loading);
             });
@@ -190,12 +269,16 @@ function baseController($scope, $http, ajaxURL, pageNowName) {
                     rqs_data = {
                         type: 'UPDATE',
                         SensorFile: updateNode,
-                        SensorIDList: $scope.SensorIDList
+                        SensorIDList: $scope.sensorsuccessList
                     };
                     var loading = zeroModal.loading(4);
                     $http.post("sendbase", rqs_data).then(function success(rsp) {
                         setWorking();
                         zeroModal.close(loading);
+
+                        $scope.sensorsuccessList = [];
+                        $scope.SensorIDList = [];
+
                     }, function err(rsp) {
                         zeroModal.close(loading);
                     });
@@ -208,9 +291,11 @@ function baseController($scope, $http, ajaxURL, pageNowName) {
     }
 
     $scope.sendUpdateProfile = function () {
+
         SensorIDValidate(function () {
             var W = 480;
             var H = 360;
+
             zeroModal.show({
                 title: '请选择配置文件！',
                 content: profile_list,
@@ -226,12 +311,17 @@ function baseController($scope, $http, ajaxURL, pageNowName) {
                     rqs_data = {
                         type: 'UPDATE_PROFILE',
                         ProFile: updateProfile,
-                        SensorIDList: $scope.SensorIDList
+                        SensorIDList: $scope.sensorsuccessList
                     };
+
                     var loading = zeroModal.loading(4);
                     $http.post("sendbase", rqs_data).then(function success(rsp) {
                         setWorking();
                         zeroModal.close(loading);
+
+                        $scope.sensorsuccessList = [];
+                        $scope.SensorIDList = [];
+
                     }, function err(rsp) {
                         zeroModal.close(loading);
                     });
@@ -262,7 +352,6 @@ function baseController($scope, $http, ajaxURL, pageNowName) {
                     return false;
                 }
                 $scope.searchData.group = nowGroup.id;
-                console.log($scope.Groups);
                 $scope.$apply();
                 $scope.searchDataChange('group');
                 $scope.groupText = nowGroup.text;
@@ -294,8 +383,8 @@ function baseController($scope, $http, ajaxURL, pageNowName) {
                     return false;
                 }
                 var sidList = [];
-                for (var i = $scope.SensorIDList.length - 1; i >= 0; i--) {
-                    var SensorID = $scope.SensorIDList[i];
+                for (var i = $scope.sensorsuccessList.length - 1; i >= 0; i--) {
+                    var SensorID = $scope.sensorsuccessList[i];
                     var sensor = $scope.SensorList[SensorID];
                     sidList.push(sensor.id);
                 }
@@ -314,6 +403,10 @@ function baseController($scope, $http, ajaxURL, pageNowName) {
                         zeroModal.error('加入计算机分组失败！');
                     }
                     zeroModal.close(loading);
+
+                    $scope.sensorsuccessList = [];
+                    $scope.SensorIDList = [];
+
                 }, function err(rsp) {
                     zeroModal.error('加入计算机分组失败！');
                     zeroModal.close(loading);
@@ -322,6 +415,36 @@ function baseController($scope, $http, ajaxURL, pageNowName) {
             onCleanup: function () {
                 hide_box.appendChild(groupTree);
             }
+        });
+    }
+
+    //删除Sensor
+    $scope.sendDelete = function () {
+        var W = 480;
+        var H = 360;
+
+        zeroModal.confirm({
+            content: '确定要删除吗？',
+            width: W + "px",
+            height: H + "px",
+            okFn: function() {
+                var rqs_data = {
+                    sid: $scope.sensorDangerList
+                };
+                var loading = zeroModal.loading(4);
+
+                $http.delete("/sensor/del-sensor", {data: rqs_data})
+                    .then(function success(rsp) {
+                        //$scope.$apply();
+                        $scope.getPage();
+                        zeroModal.close(loading);
+
+                    }, function err(rsp) {
+                        zeroModal.close(loading);
+                        zeroModal.error('删除计算机失败！');
+                    });
+            },
+            cancelFn: function() {}
         });
     }
 
@@ -342,6 +465,12 @@ function baseController($scope, $http, ajaxURL, pageNowName) {
             $scope.getPage();
         }
     }, 5000);
+
+
+    // 选择页面数据条数,更新数据
+    $scope.select_change = function () {
+        $scope.getPage();
+    }
 }
 
 app.controller('protectCtrl', function ($scope, $http, $filter) {
