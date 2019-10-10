@@ -530,7 +530,11 @@ myApp.controller("behCtrl", function ($scope, $http, $filter) {
             cancel: true,
             okFn: function () {
                 if (!nowGroup) {
-                    zeroModal.error('请选择计算机分组！');
+                    // zeroModal.error('请选择计算机分组！');
+                    $scope.searchData.gid = '*';
+                    hide_box.appendChild(groupTree);
+                    $scope.$apply();
+                    zeroModal.closeAll();
                     return false;
                 }
                 $scope.searchData.gid = nowGroup.id;
