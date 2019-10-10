@@ -358,6 +358,7 @@ myApp.controller("behCtrl", function ($scope, $http, $filter) {
             $scope.ariaID = null;
         }, 10);
     };
+
     $scope.update = function (type, item) {
         var rqs_data = {
             type: type,
