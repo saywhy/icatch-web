@@ -565,7 +565,9 @@ app.controller('quarantineCtrl', function ($scope, $http, $filter) {
 
         for (var i = 0; i < GroupList.length; i++) {
             var group = GroupList[i];
+
             Groups[group.id] = group;
+
             group.type = '' + group.type;
             if (group.pid == 0) {
                 GroupTree.push(group);

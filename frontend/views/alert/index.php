@@ -190,7 +190,7 @@ $this->title = '威胁';
                             <option value="" label="所有"></option>
                             <option ng-repeat="x in alertGid_select" value="{{x.text}}" label="{{x.text}}"></option>
                         </select> -->
-                        <input ng-model="Groups[searchData.group].text" name="" class="form-control" ng-click="searchGroups()"
+                        <input ng-model="Groups[searchData.gid].text" name="" class="form-control" ng-click="searchGroups()"
                         style="cursor: default;" />
                     </div>
                     <!-- 组下拉框 -->

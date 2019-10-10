@@ -283,6 +283,7 @@ myApp.controller("behCtrl", function ($scope, $http, $filter) {
             gid: $scope.searchObj.gid
         };
 
+
         if (!autoplay) {
             params.stime = '';
             params.etime = '';
