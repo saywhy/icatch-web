@@ -2,7 +2,6 @@ if (!myApp) {
     var myApp = angular.module("myApp", []);
 }
 
-var rootScope = null;
 var Groups = {
     '*': {
         text: '所有',
@@ -61,8 +60,7 @@ myApp.controller("behCtrl", function ($scope, $http, $filter) {
         ComputerName: "",
         AlertType: 10,
         Label: "",
-        // Label: "",
-        gid: '',
+        gid: "*",
         MinPoint: 0,
         MaxPoint: 100
     };
@@ -533,7 +531,7 @@ myApp.controller("behCtrl", function ($scope, $http, $filter) {
                     zeroModal.error('请选择计算机分组！');
                     return false;
                 }
-                $scope.searchData.group = nowGroup.id;
+                $scope.searchData.gid = nowGroup.id;
                 $scope.$apply();
                 //$scope.searchDataChange('group');
                 $scope.groupText = nowGroup.text;

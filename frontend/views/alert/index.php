@@ -9,7 +9,7 @@ $this->title = '威胁';
         height: 34px;
         color: #555;
         border: 1px solid #ccc;
-        width: 66px;
+        width: 60px;
         padding: 5px;
         outline: none;
     }

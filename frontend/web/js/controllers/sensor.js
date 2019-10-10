@@ -517,6 +517,8 @@ app.controller('protectCtrl', function ($scope, $http, $filter) {
         $scope.sensorDangerList = [];
 
         $scope.postData = angular.copy($scope.searchData);
+
+
         if ($scope.searchType) {
             $scope.postType = $scope.searchType
         }
