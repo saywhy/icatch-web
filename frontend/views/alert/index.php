@@ -186,10 +186,12 @@ $this->title = '威胁';
                     <!-- 组下拉框 -->
                     <div class="form-group col-md-1" style="width: 150px;">
                         <label>组</label>
-                        <select class="form-control input_radius" ng-model="searchData.gid">
+                        <!--<select class="form-control input_radius" ng-model="searchData.gid">
                             <option value="" label="所有"></option>
                             <option ng-repeat="x in alertGid_select" value="{{x.text}}" label="{{x.text}}"></option>
-                        </select>
+                        </select> -->
+                        <input ng-model="Groups[searchData.group].text" name="" class="form-control" ng-click="searchGroups()"
+                        style="cursor: default;" />
                     </div>
                     <!-- 组下拉框 -->
 
@@ -218,6 +220,19 @@ $this->title = '威胁';
                         <button class=" btn btn-primary btn_style" style="max-width: 80px;" ng-click="search()">搜
                             索</button>
                     </div>
+
+                    <style type="text/css">
+                        .list-group-item:first-child,
+                        .list-group-item:last-child {
+                            border-radius: 0px;
+                        }
+                    </style>
+                    <div id="hide_box" style="display: none;">
+                        <div id="update_list"></div>
+                        <div id="profile_list"></div>
+                        <div id="groupTree"></div>
+                    </div>
+
                 </div>
 
                 <div class="box-body table-responsive no-padding">
@@ -241,7 +256,7 @@ $this->title = '威胁';
                                     ng-click="detail(item,$event)">
                                     <td style="z-index:999;" ng-click="$event.stopPropagation();">
                                         <input type="checkbox" ng-checked="IDList.indexOf(item.id) != -1"
-                                            ng-click="selectOne(item,$event)" ng-disabled="(item.status != 1)">
+                                        ng-click="selectOne(item,$event)">
                                     </td>
 
                                     <td style="padding-left: 30px;position:relative;"
@@ -258,7 +273,6 @@ $this->title = '威胁';
                                     <td ng-bind="item.Label"></td>
                                     <td ng-bind="item.created_at*1000 | date:'yyyy-MM-dd HH:mm'"></td>
                                     <td ng-bind="item.Point == 100 ? 100 : 0"></td>
-
                                     <td>
                                         <div class="btn-group {{(ariaID == item.id)?'open':''}}">
                                             <button type="button"

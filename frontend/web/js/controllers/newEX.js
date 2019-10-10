@@ -2,10 +2,23 @@ if (!myApp) {
     var myApp = angular.module("myApp", []);
 }
 
+var rootScope = null;
+var Groups = {
+    '*': {
+        text: '所有',
+        type: '*'
+    }
+};
+
+var nowGroup = null;
+
 //当前告警控制器
 myApp.controller("behCtrl", function ($scope, $http, $filter) {
     let listTimer = null;
     let autoplay = false;
+
+    $scope.Groups = Groups;
+
     $scope.pages = {
         data: [],
         count: 0,
@@ -278,7 +291,6 @@ myApp.controller("behCtrl", function ($scope, $http, $filter) {
         }
 
         //console.log(params)
-
         $scope.pageGeting = true;
         $http.post("newpage", params).then(
             function success(rsp) {
@@ -455,16 +467,15 @@ myApp.controller("behCtrl", function ($scope, $http, $filter) {
         }
     };
 
-    //ycl 计算机名点击链接计算机卡片
+    //计算机名点击链接计算机卡片
     $scope.linkToSensor = function (SensorID, $event) {
         $event.stopPropagation();
         location.href = "/sensor/detail?sid=" + SensorID;
     }
 
-    //ycl 当前告警checkbox单选
+    //当前告警checkbox单选
     $scope.selectOne = function (item, $event) {
         $event.stopPropagation();
-
         //停掉自动刷新状态
         clearInterval(listTimer);
         var index = $scope.IDList.indexOf(item.id);
@@ -501,4 +512,68 @@ myApp.controller("behCtrl", function ($scope, $http, $filter) {
         $scope.IDList = [];
         $scope.IDListData = [];
     }
+
+
+    //告警组点击事件
+    $scope.searchGroups = function () {
+        var W = 480;
+        var H = 360;
+        $scope.option = 'hide';
+        // $scope.$apply();
+
+        zeroModal.show({
+            title: '请选择计算机分组！',
+            content: groupTree,
+            width: W + "px",
+            height: H + "px",
+            ok: true,
+            cancel: true,
+            okFn: function () {
+                if (!nowGroup) {
+                    zeroModal.error('请选择计算机分组！');
+                    return false;
+                }
+                $scope.searchData.group = nowGroup.id;
+                $scope.$apply();
+                //$scope.searchDataChange('group');
+                $scope.groupText = nowGroup.text;
+            },
+            onCleanup: function () {
+                hide_box.appendChild(groupTree);
+                $scope.option = 'show';
+            }
+        });
+    }
+
+
+    var GroupTree = [];
+
+    for (var i = 0; i < GroupList.length; i++) {
+        var group = GroupList[i];
+        Groups[group.id] = group;
+        group.type = '' + group.type;
+        if (group.pid == 0) {
+            GroupTree.push(group);
+        } else {
+            if (!Groups[group.pid].nodes) {
+                Groups[group.pid].nodes = [];
+            }
+            Groups[group.pid].nodes.push(group);
+        }
+    }
+
+    var treeDom;
+    function updateTree() {
+        treeDom = $('#groupTree').treeview({
+            color: "#428bca",
+            data: GroupTree,
+            onNodeSelected: function (event, node) {
+                nowGroup = node;
+            },
+            onNodeUnselected: function (event, node) {
+                nowGroup = null;
+            }
+        });
+    }
+    updateTree();
 });

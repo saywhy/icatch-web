@@ -356,7 +356,7 @@ function baseController($scope, $http, ajaxURL, pageNowName) {
                 }
                 $scope.searchData.group = nowGroup.id;
                 $scope.$apply();
-                $scope.searchDataChange('group');
+               // $scope.searchDataChange('group');
                 $scope.groupText = nowGroup.text;
             },
             onCleanup: function () {
@@ -501,16 +501,21 @@ app.controller('protectCtrl', function ($scope, $http, $filter) {
     $scope.postData = {};
 
     $scope.searchDataChange = function (key_change) {
-        for (var key in $scope.searchData) {
+        /*for (var key in $scope.searchData) {
             if (key != key_change) {
                 $scope.searchData[key] = '*';
             } else {
                 $scope.searchType = key;
             }
-        }
+        }*/
     }
 
     $scope.search = function (key_change) {
+
+        $scope.SensorIDList = [];
+        $scope.sensorsuccessList = [];
+        $scope.sensorDangerList = [];
+
         $scope.postData = angular.copy($scope.searchData);
         if ($scope.searchType) {
             $scope.postType = $scope.searchType
