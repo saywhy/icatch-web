@@ -466,6 +466,14 @@ function baseController($scope, $http, ajaxURL, pageNowName) {
 
     $scope.getPage();
 
+    //计算机列表分页点击事件
+    $scope.getPageClick = function(pageNow){
+        $scope.SensorIDList = [];
+        $scope.sensorsuccessList = [];
+        $scope.sensorDangerList = [];
+        $scope.getPage(pageNow);
+    }
+
     $scope.pageGeting = false;
 
     setInterval(function () {

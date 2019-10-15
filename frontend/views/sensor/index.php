@@ -85,7 +85,7 @@ $this->title = '计算机';
                                 <button type="button" ng-click="addGroups()" class="btn btn-default" ng-class="sensorsuccessList.length  && sensorDangerList.length == 0 ? '' : 'disabled'" ng-disabled="!sensorsuccessList.length || sensorDangerList.length">加入计算机组</button>
                                 <button type="button" ng-click="sendUpdate()" class="btn btn-default" ng-class="sensorsuccessList.length  && sensorDangerList.length == 0 ? '' : 'disabled'" ng-disabled="!sensorsuccessList.length || sensorDangerList.length">升级Sensor</button>
                                 <button type="button" ng-click="sendBase('UNINIT')" class="btn btn-default" ng-class="sensorsuccessList.length  && sensorDangerList.length == 0 ? '' : 'disabled'" ng-disabled="!sensorsuccessList.length || sensorDangerList.length">卸载Sensor</button>
-                                <button type="button" ng-click="sendDelete()" class="btn btn-default"  ng-class="sensorDangerList.length  && sensorsuccessList.length == 0 ? '' : 'disabled'" ng-disabled="!sensorDangerList.length || sensorsuccessList.length">删除Sensor</button>
+                                <button type="button" ng-click="sendDelete()" class="btn btn-default"  ng-class="sensorDangerList.length  && sensorsuccessList.length == 0 ? '' : 'disabled'" ng-disabled="!sensorDangerList.length || sensorsuccessList.length">删除计算机</button>
                             </div>
                             <?php }?>
                             <style type="text/css">
@@ -149,28 +149,28 @@ $this->title = '计算机';
                                 <em>共有<span ng-bind="pages.count"></span>台计算机</em>
                                 <!-- angularjs分页 -->
                                 <ul class="pagination pagination-sm no-margin pull-right ng-cloak">
-                                    <li><a href="javascript:void(0);" ng-click="getPage(pages.pageNow-1)" ng-if="pages.pageNow>1">上一页</a></li>
-                                    <li><a href="javascript:void(0);" ng-click="getPage(1)" ng-if="pages.pageNow>1">1</a></li>
+                                    <li><a href="javascript:void(0);" ng-click="getPageClick(pages.pageNow-1)" ng-if="pages.pageNow>1">上一页</a></li>
+                                    <li><a href="javascript:void(0);" ng-click="getPageClick(1)" ng-if="pages.pageNow>1">1</a></li>
                                     <li><a href="javascript:void(0);" ng-if="pages.pageNow>4">...</a></li>
 
-                                    <li><a href="javascript:void(0);" ng-click="getPage(pages.pageNow-2)" ng-bind="pages.pageNow-2"
+                                    <li><a href="javascript:void(0);" ng-click="getPageClick(pages.pageNow-2)" ng-bind="pages.pageNow-2"
                                             ng-if="pages.pageNow>3"></a></li>
-                                    <li><a href="javascript:void(0);" ng-click="getPage(pages.pageNow-1)" ng-bind="pages.pageNow-1"
+                                    <li><a href="javascript:void(0);" ng-click="getPageClick(pages.pageNow-1)" ng-bind="pages.pageNow-1"
                                             ng-if="pages.pageNow>2"></a></li>
 
                                     <li class="active"><a href="javascript:void(0);" ng-bind="pages.pageNow"></a></li>
 
-                                    <li><a href="javascript:void(0);" ng-click="getPage(pages.pageNow+1)" ng-bind="pages.pageNow+1"
+                                    <li><a href="javascript:void(0);" ng-click="getPageClick(pages.pageNow+1)" ng-bind="pages.pageNow+1"
                                             ng-if="pages.pageNow<pages.maxPage-1"></a></li>
-                                    <li><a href="javascript:void(0);" ng-click="getPage(pages.pageNow+2)" ng-bind="pages.pageNow+2"
+                                    <li><a href="javascript:void(0);" ng-click="getPageClick(pages.pageNow+2)" ng-bind="pages.pageNow+2"
                                             ng-if="pages.pageNow<pages.maxPage-2"></a></li>
 
 
                                     <li><a href="javascript:void(0);" ng-if="pages.pageNow<pages.maxPage-3">...</a></li>
 
-                                    <li><a href="javascript:void(0);" ng-click="getPage(pages.maxPage)" ng-bind="pages.maxPage"
+                                    <li><a href="javascript:void(0);" ng-click="getPageClick(pages.maxPage)" ng-bind="pages.maxPage"
                                             ng-if="pages.pageNow<pages.maxPage"></a></li>
-                                    <li><a href="javascript:void(0);" ng-click="getPage(pages.pageNow+1)" ng-if="pages.pageNow<pages.maxPage">下一页</a></li>
+                                    <li><a href="javascript:void(0);" ng-click="getPageClick(pages.pageNow+1)" ng-if="pages.pageNow<pages.maxPage">下一页</a></li>
                                 </ul>
                                  <select class="alert_search_input" ng-change="select_change()" style="background-color: #fff;"
                                                                     ng-model="select.model" ng-options="x.num as x.type for x in select_model"></select>
