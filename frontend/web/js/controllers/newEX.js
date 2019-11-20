@@ -288,12 +288,9 @@ myApp.controller("behCtrl", function ($scope, $http, $filter) {
             params.stime = '';
             params.etime = '';
         }
-
-        //console.log(params)
         $scope.pageGeting = true;
         $http.post("newpage", params).then(
             function success(rsp) {
-
                 $scope.pageGeting = false;
                 $scope.pages = rsp.data;
                 angular.forEach($scope.pages.data, function (item) {
@@ -567,6 +564,7 @@ myApp.controller("behCtrl", function ($scope, $http, $filter) {
     }
 
     var treeDom;
+
     function updateTree() {
         treeDom = $('#groupTree').treeview({
             color: "#428bca",
