@@ -60,7 +60,7 @@ myApp.controller("behCtrl", function ($scope, $http, $filter) {
         ComputerName: "",
         AlertType: 10,
         Label: "",
-        gid: "*",
+        gid: "",
         MinPoint: 0,
         MaxPoint: 100
     };
