@@ -60,7 +60,7 @@ myApp.controller("behCtrl", function ($scope, $http, $filter) {
         ComputerName: "",
         AlertType: 10,
         Label: "",
-        gid: "*",
+        gid: "",
         MinPoint: 0,
         MaxPoint: 100
     };
@@ -531,7 +531,7 @@ myApp.controller("behCtrl", function ($scope, $http, $filter) {
             okFn: function () {
                 if (!nowGroup) {
                     // zeroModal.error('请选择计算机分组！');
-                    $scope.searchData.gid = '*';
+                    $scope.searchData.gid = '';
                     hide_box.appendChild(groupTree);
                     $scope.$apply();
                     zeroModal.closeAll();
