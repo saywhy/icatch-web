@@ -37,12 +37,12 @@ function getPath($path)
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>m
-        <?=$this->title?>
+    <title>
+       <?=$this->title?>
     </title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <!-- Bootstrap 3.3.6 -->
+    <!-- Bootstrap 3.3.6 /**/ -->
     <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="/plugins/font-awesome-4.7.0/css/font-awesome.min.css">
@@ -89,9 +89,9 @@ function getPath($path)
         <header class="main-header">
             <!-- Logo -->
             <a href="/" class="logo">
-                <span class="logo-mini"><img src="/images/hoohoolab-logo-black.png" style="height: 36px"></span>
+                <span class="logo-mini"><img src="/images/hoohoolab-logo-block1.png" style="height: 36px"></span>
                 <span class="logo-lg">
-                    <img src="/images/hoohoolab-logo-black.png"
+                    <img src="/images/hoohoolab-logo-block1.png"
                         style="height: 36px;margin-right: 10px;margin-bottom: 10px;">
                 </span>
             </a>
@@ -176,7 +176,7 @@ function getPath($path)
             </section>
             <?=$content?>
             <div class="hoohoolab-footer">
-                <span>&copy; 2017 虎特信息科技(上海)有限公司 版权所有</span>
+                <span>&copy; 北京立思辰计算机技术有限公司</span>
                 <!-- <span>&copy; 2019 北京圣博润高新技术股份有限公司</span> -->
             </div>
         </div>

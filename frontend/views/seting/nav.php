@@ -2,7 +2,7 @@
 function isActiveNav($path)
 {
     $url = explode('?',Yii::$app->request->getUrl())[0];
-    $url = rtrim($url, '/'); 
+    $url = rtrim($url, '/');
     if($url == $path)
     {
         return 'active';
@@ -14,7 +14,7 @@ function isActiveNav($path)
 function getPathNav($path)
 {
     $url = explode('?',Yii::$app->request->getUrl())[0];
-    $url = rtrim($url, '/'); 
+    $url = rtrim($url, '/');
     if($url == $path)
     {
         return 'javascript:void(0);';
@@ -47,9 +47,9 @@ function getPathNav($path)
           <li class="<?= isActiveNav('/seting/loophole') ?>">
             <a href="<?= getPathNav('/seting/loophole') ?>">防御设置</a>
           </li>
-          <li class="<?= isActiveNav('/seting/rule') ?>">
+          <!--<li class="<?= isActiveNav('/seting/rule') ?>">
             <a href="<?= getPathNav('/seting/rule') ?>">库管理</a>
-          </li>
+          </li>-->
           <li class="<?= isActiveNav('/seting/email') ?>">
             <a href="<?= getPathNav('/seting/email') ?>">邮件通知</a>
           </li>
