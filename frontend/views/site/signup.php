@@ -28,10 +28,8 @@ $this->context->layout = false;
 
     <div class="header">
       <label style="display: inline-block;margin-left: 20px;">
-        <i style="display: block;font-family:SimHei; font-size:36px; font-weight:700; ">国联勒索病毒防御系统 V1.0</i>
-        <!-- <i style="display: block;font-family:SimHei; font-size:36px; font-weight:700; ">恶意代码检测与防御系统 V2.0</i> -->
-        <!-- <i style="display: block;font-family:Arial; font-size:18px;">Threat detection and response systems 2.0</i> -->
-        <i style="display: block;font-family:Arial; font-size:18px;">Threat detection and response systems 1.0</i>
+        <i style="display: block;font-family:SimHei; font-size:36px; font-weight:700; ">恶意代码检测与防御系统 V2.0</i>
+        <i style="display: block;font-family:Arial; font-size:18px;">Threat detection and response systems 2.0</i>
       </label>
     </div>
     <div class="body">

@@ -60,8 +60,7 @@ if ($exception->statusCode == 404) {
                         如有疑问请联系请联系我们，谢谢！
                     </p>
                     <em>
-                        <!-- <a href="http://www.hoohoolab.com/" target="_blank">虎特信息科技(上海)有限公司</a> -->
-                        <a href="#" target="_blank">北京国联易安信息技术有限公司</a>
+                        <a href="#" target="_blank">北京立思辰计算机技术有限公司</a>
                     </em>
                     <br/><br/><br/><br/>
                     <p>

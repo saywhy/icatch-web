@@ -177,7 +177,7 @@ function getPath($path)
             <?=$content?>
             <div class="hoohoolab-footer">
                 <span>&copy; 北京立思辰计算机技术有限公司</span>
-                <!-- <span>&copy; 2019 北京圣博润高新技术股份有限公司</span> -->
+
             </div>
         </div>
         <script src="/plugins/jQuery/jquery-2.2.3.min.js"></script>

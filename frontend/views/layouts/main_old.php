@@ -106,7 +106,7 @@ NavBar::end();
                 <?=date('Y')?>
             </p> -->
             <!-- <p class="pull-right">技术支持<a href="http://www.hoohoolab.com/" rel="external">虎特信息科技(上海)有限公司</a></p> -->
-            <p class="pull-right">北京国联易安信息技术有限公司</p>
+            <p class="pull-right">北京立思辰计算机技术有限公司</p>
         </div>
     </footer>
 

@@ -177,7 +177,6 @@ function getPath($path)
             <?=$content?>
             <div class="hoohoolab-footer">
                 <span>&copy; 虎特信息科技(上海)有限公司 版权所有</span>
-                <!-- <span>&copy; 2019 北京圣博润高新技术股份有限公司</span> -->
             </div>
         </div>
         <script src="/plugins/jQuery/jquery-2.2.3.min.js"></script>
