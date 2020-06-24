@@ -61,19 +61,16 @@ if ($exception->statusCode == 404) {
                     </p>
                     <em>
                         <!-- <a href="http://www.hoohoolab.com/" target="_blank">虎特信息科技(上海)有限公司</a> -->
-                        <a href="#" target="_blank">2019 北京圣博润高新技术股份有限公司</a>
+                        <a href="#" target="_blank">北京国联易安信息技术有限公司</a>
                     </em>
                     <br/><br/><br/><br/>
                     <p>
                         <a href="javascript:history.back();">返回上一页</a>
                     </p>
-
                 </div>
             </div>
         </div>
-
     </div>
-
 </body>
 </html>
 
